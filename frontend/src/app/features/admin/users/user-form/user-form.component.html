@@ -1,1 +1,52 @@
-<p>user-form works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>{{ isEditMode ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label>Nombre:</label>
+      <input type="text" [(ngModel)]="user.name" name="name" required>
+    </div>
+
+    <div>
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="user.email" name="email" required>
+    </div>
+
+    <div>
+      <label>Teléfono:</label>
+      <input type="text" [(ngModel)]="user.phone" name="phone">
+    </div>
+
+    <div>
+      <label>Contraseña:</label>
+      <input
+        type="password"
+        [(ngModel)]="user.password"
+        name="password"
+        [required]="!isEditMode">
+      <small *ngIf="isEditMode">Dejar en blanco para no cambiar</small>
+    </div>
+
+    <div>
+      <label>Rol:</label>
+      <select [(ngModel)]="user.role" name="role" required>
+        <option value="admin">Admin</option>
+        <option value="alumno">Alumno</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Guardando...' : 'Guardar' }}
+    </button>
+
+    <!-- <button type="button" (click)="router.navigate(['/admin/users'])">
+      Cancelar
+    </button> -->
+
+    <div *ngIf="error" style="color: red;">
+      {{ error }}
+    </div>
+  </form>
+</div>

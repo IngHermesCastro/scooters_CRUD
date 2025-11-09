@@ -1,1 +1,32 @@
-<p>my-courses works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>Mis Cursos Asignados</h2>
+
+  <div *ngIf="loading">
+    Cargando cursos...
+  </div>
+
+  <div *ngIf="!loading && courses.length > 0">
+    <p><strong>Total de horas:</strong> {{ getTotalHours() }} horas</p>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Curso</th>
+          <th>Intensidad Horaria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses">
+          <td>{{ course.name }}</td>
+          <td>{{ course.hours }} horas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && courses.length === 0">
+    <p>No tienes cursos asignados</p>
+  </div>
+</div>

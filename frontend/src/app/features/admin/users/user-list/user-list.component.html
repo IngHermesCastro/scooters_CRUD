@@ -1,1 +1,62 @@
-<p>user-list works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>Listado de Usuarios</h2>
+
+  <a routerLink="/admin/users/create">Crear Usuario</a>
+
+  <!-- Filtros -->
+  <div>
+    <input
+      type="text"
+      [(ngModel)]="filterName"
+      placeholder="Filtrar por nombre">
+
+    <input
+      type="text"
+      [(ngModel)]="filterEmail"
+      placeholder="Filtrar por email">
+
+    <select [(ngModel)]="filterRole">
+      <option value="">Todos los roles</option>
+      <option value="admin">Admin</option>
+      <option value="alumno">Alumno</option>
+    </select>
+
+    <button (click)="applyFilters()">Buscar</button>
+    <button (click)="clearFilters()">Limpiar</button>
+  </div>
+
+  <!-- Tabla -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Rol</th>
+        <th>Cursos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone || '-' }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.courses?.length || 0 }}</td>
+        <td>
+          <a [routerLink]="['/admin/users/edit', user.id]">Editar</a>
+          <button (click)="deleteUser(user.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="users.length === 0">
+    No hay usuarios
+  </div>
+</div>

@@ -1,1 +1,69 @@
-<p>assigment-form works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>Asignar Cursos a Usuarios</h2>
+
+  <!-- Seleccionar Usuario -->
+  <div>
+    <label>Seleccionar Usuario:</label>
+    <select [(ngModel)]="selectedUserId" (change)="onUserChange()">
+      <option value="0">-- Selecciona un usuario --</option>
+      <option *ngFor="let user of users" [value]="user.id">
+        {{ user.name }} ({{ user.email }})
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedUserId > 0">
+    <!-- Cursos Disponibles -->
+    <div>
+      <h3>Cursos Disponibles</h3>
+      <div *ngFor="let course of courses">
+        <label>
+          <input
+            type="checkbox"
+            [value]="course.id"
+            [checked]="isCourseAssigned(course.id)"
+            [disabled]="isCourseAssigned(course.id)"
+            (change)="onCourseCheckChange(course.id, $event)">
+          {{ course.name }} ({{ course.hours }} horas)
+          <span *ngIf="isCourseAssigned(course.id)">(Ya asignado)</span>
+        </label>
+      </div>
+    </div>
+
+    <button (click)="assignCourses()" [disabled]="loading || selectedCourseIds.length === 0">
+      {{ loading ? 'Asignando...' : 'Asignar Cursos Seleccionados' }}
+    </button>
+
+    <!-- Cursos Asignados al Usuario -->
+    <div *ngIf="userCourses.length > 0">
+      <h3>Cursos Asignados</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Curso</th>
+            <th>Intensidad Horaria</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of userCourses">
+            <td>{{ course.name }}</td>
+            <td>{{ course.hours }} horas</td>
+            <td>
+              <button (click)="unassignCourse(course.id)">Desasignar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="userCourses.length === 0">
+      <p>Este usuario no tiene cursos asignados</p>
+    </div>
+  </div>
+
+  <div *ngIf="error" style="color: red;">{{ error }}</div>
+  <div *ngIf="success" style="color: green;">{{ success }}</div>
+</div>

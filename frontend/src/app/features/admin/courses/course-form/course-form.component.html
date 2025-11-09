@@ -1,1 +1,29 @@
-<p>course-form works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>{{ isEditMode ? 'Editar Curso' : 'Crear Curso' }}</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label>Nombre del Curso:</label>
+      <input type="text" [(ngModel)]="course.name" name="name" required>
+    </div>
+
+    <div>
+      <label>Intensidad Horaria:</label>
+      <input type="number" [(ngModel)]="course.hours" name="hours" required min="1">
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Guardando...' : 'Guardar' }}
+    </button>
+
+    <button type="button" (click)="onCancel()">
+      Cancelar
+    </button>
+
+    <div *ngIf="error" style="color: red;">
+      {{ error }}
+    </div>
+  </form>
+</div>

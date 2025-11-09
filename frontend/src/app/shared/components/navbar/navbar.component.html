@@ -1,0 +1,18 @@
+<nav *ngIf="currentUser">
+  <div>
+    <span>{{ currentUser.name }} ({{ currentUser.role }})</span>
+  </div>
+
+  <div *ngIf="isAdmin()">
+    <a routerLink="/admin/dashboard">Dashboard</a>
+    <a routerLink="/admin/users">Usuarios</a>
+    <a routerLink="/admin/courses">Cursos</a>
+    <a routerLink="/admin/assignments">Asignar Cursos</a>
+  </div>
+
+  <div *ngIf="!isAdmin()">
+    <a routerLink="/student/my-courses">Mis Cursos</a>
+  </div>
+
+  <button (click)="logout()">Cerrar Sesión</button>
+</nav>

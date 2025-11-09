@@ -1,1 +1,45 @@
-<p>course-list works!</p>
+<app-navbar></app-navbar>
+
+<div>
+  <h2>Listado de Cursos</h2>
+
+  <a routerLink="/admin/courses/create">Crear Curso</a>
+
+  <!-- Filtros -->
+  <div>
+    <input
+      type="text"
+      [(ngModel)]="filterName"
+      placeholder="Filtrar por nombre">
+
+    <button (click)="applyFilters()">Buscar</button>
+    <button (click)="clearFilters()">Limpiar</button>
+  </div>
+
+  <!-- Tabla -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Intensidad Horaria</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses">
+        <td>{{ course.id }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.hours }} horas</td>
+        <td>
+          <a [routerLink]="['/admin/courses/edit', course.id]">Editar</a>
+          <button (click)="deleteCourse(course.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="courses.length === 0">
+    No hay cursos
+  </div>
+</div>
