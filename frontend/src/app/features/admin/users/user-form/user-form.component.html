@@ -1,52 +1,147 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>{{ isEditMode ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
-
-  <form (ngSubmit)="onSubmit()">
-    <div>
-      <label>Nombre:</label>
-      <input type="text" [(ngModel)]="user.name" name="name" required>
+<div class="user-form-container">
+  <div class="form-wrapper">
+    <!-- Header -->
+    <div class="form-header">
+      <div class="header-icon">
+        <i class="fas" [class.fa-user-edit]="isEditMode" [class.fa-user-plus]="!isEditMode"></i>
+      </div>
+      <div class="header-content">
+        <h1 class="form-title">{{ isEditMode ? 'Editar Usuario' : 'Crear Usuario' }}</h1>
+        <p class="form-subtitle">
+          {{ isEditMode ? 'Actualiza la información del usuario' : 'Completa los datos para crear un nuevo usuario' }}
+        </p>
+      </div>
     </div>
 
-    <div>
-      <label>Email:</label>
-      <input type="email" [(ngModel)]="user.email" name="email" required>
-    </div>
+    <!-- Form -->
+    <form (ngSubmit)="onSubmit()" class="user-form">
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-user me-2"></i>
+            Nombre Completo
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.name"
+            name="name"
+            required
+            placeholder="Ingresa el nombre completo">
+          <div class="form-hint">Nombre y apellidos del usuario</div>
+        </div>
 
-    <div>
-      <label>Teléfono:</label>
-      <input type="text" [(ngModel)]="user.phone" name="phone">
-    </div>
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-envelope me-2"></i>
+            Correo Electrónico
+          </label>
+          <input
+            type="email"
+            class="form-control"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            placeholder="ejemplo@correo.com">
+          <div class="form-hint">El email será usado para iniciar sesión</div>
+        </div>
 
-    <div>
-      <label>Contraseña:</label>
-      <input
-        type="password"
-        [(ngModel)]="user.password"
-        name="password"
-        [required]="!isEditMode">
-      <small *ngIf="isEditMode">Dejar en blanco para no cambiar</small>
-    </div>
+        <!-- Teléfono -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-phone me-2"></i>
+            Teléfono
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.phone"
+            name="phone"
+            placeholder="312 326 95 37">
+          <div class="form-hint">Número de contacto opcional</div>
+        </div>
 
-    <div>
-      <label>Rol:</label>
-      <select [(ngModel)]="user.role" name="role" required>
-        <option value="admin">Admin</option>
-        <option value="alumno">Alumno</option>
-      </select>
-    </div>
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-lock me-2"></i>
+            Contraseña
+          </label>
+          <div class="password-input-group">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              [(ngModel)]="user.password"
+              name="password"
+              [required]="!isEditMode"
+              placeholder="Ingresa la contraseña">
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+            </button>
+          </div>
+          <div class="form-hint" *ngIf="isEditMode">
+            <i class="fas fa-info-circle me-1"></i>
+            Dejar en blanco para mantener la contraseña actual
+          </div>
+          <div class="form-hint" *ngIf="!isEditMode">
+            <i class="fas fa-shield-alt me-1"></i>
+            La contraseña debe tener al menos 6 caracteres
+          </div>
+        </div>
 
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Guardando...' : 'Guardar' }}
-    </button>
+        <!-- Rol -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-user-tag me-2"></i>
+            Rol de Usuario
+          </label>
+          <select class="form-select" [(ngModel)]="user.role" name="role" required>
+            <option value="">Selecciona un rol</option>
+            <option value="admin">Administrador</option>
+            <option value="alumno">Alumno</option>
+          </select>
+          <div class="form-hint">
+            <span class="role-hint admin" *ngIf="user.role === 'admin'">
+              <i class="fas fa-crown me-1"></i>
+              Acceso completo al sistema
+            </span>
 
-    <!-- <button type="button" (click)="router.navigate(['/admin/users'])">
-      Cancelar
-    </button> -->
+            <span *ngIf="!user.role">Define los permisos del usuario</span>
+          </div>
+        </div>
+      </div>
 
-    <div *ngIf="error" style="color: red;">
-      {{ error }}
-    </div>
-  </form>
+      <!-- Error Message -->
+      <div *ngIf="error" class="error-message">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ error }}
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="loading"
+          [class.loading]="loading">
+          <span class="btn-content">
+            <i class="fas" [class.fa-save]="!loading" [class.fa-spinner]="loading"></i>
+            {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar Usuario' : 'Crear Usuario') }}
+          </span>
+          <span class="btn-loader" *ngIf="loading">
+            <div class="spinner"></div>
+          </span>
+        </button>
+
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          <i class="fas fa-times me-2"></i>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

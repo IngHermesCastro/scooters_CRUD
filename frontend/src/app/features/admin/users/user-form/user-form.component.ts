@@ -27,12 +27,14 @@ export class UserFormComponent implements OnInit {
 
   error: string = '';
   loading: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
+
 
   ngOnInit() {
     this.userId = Number(this.route.snapshot.paramMap.get('id'));
@@ -41,6 +43,12 @@ export class UserFormComponent implements OnInit {
       this.isEditMode = true;
       this.loadUser();
     }
+  }
+  onCancel(): void {
+    this.router.navigate(['/admin/users']);
+  }
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   loadUser() {
