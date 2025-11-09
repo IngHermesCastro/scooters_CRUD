@@ -1,31 +1,105 @@
-<div>
-  <h2>Login</h2>
+<div class="login-container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-xl-4 col-lg-5 col-md-6">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-body p-5">
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <div
+              class="login-icon bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+            >
+              <i class="bi bi-person-fill text-white"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-2">Bienvenido de nuevo</h3>
+            <p class="text-muted">Ingresa tus credenciales para continuar</p>
+          </div>
 
-  <form (ngSubmit)="onSubmit()">
-    <div>
-      <label>Email:</label>
-      <input
-        type="email"
-        [(ngModel)]="email"
-        name="email"
-        required>
+          <form (ngSubmit)="onSubmit()" class="mt-4">
+            <!-- Email Field -->
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold text-dark"
+                >Correo Electrónico</label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-envelope-fill text-muted"></i>
+                </span>
+                <input
+                  type="email"
+                  class="form-control border-start-0 ps-2"
+                  id="email"
+                  [(ngModel)]="email"
+                  name="email"
+                  required
+                  placeholder="tu@email.com"
+                />
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+              <div
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <label for="password" class="form-label fw-semibold text-dark"
+                  >Contraseña</label
+                >
+              </div>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-lock-fill text-muted"></i>
+                </span>
+                <input
+                  type="password"
+                  class="form-control border-start-0 ps-2"
+                  id="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  required
+                  placeholder="Ingresa tu contraseña"
+                  autocomplete="off"
+                />
+                <button
+                  class="btn btn-outline-secondary border-start-0"
+                  type="button"
+                  id="togglePassword"
+                >
+                  <i class="bi bi-eye-fill"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-3 fw-semibold rounded-2"
+              [disabled]="loading"
+              [class]="loading ? 'btn-secondary' : 'btn-primary'"
+            >
+              <span *ngIf="!loading">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+              </span>
+              <span *ngIf="loading">
+                <div
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                ></div>
+                Procesando...
+              </span>
+            </button>
+
+            <!-- Error Message -->
+            <div
+              *ngIf="error"
+              class="alert alert-danger d-flex align-items-center mt-4"
+              role="alert"
+            >
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>{{ error }}</div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-
-    <div>
-      <label>Password:</label>
-      <input
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        required>
-    </div>
-
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Cargando...' : 'Iniciar Sesión' }}
-    </button>
-
-    <div *ngIf="error" style="color: red;">
-      {{ error }}
-    </div>
-  </form>
+  </div>
 </div>
