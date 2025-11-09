@@ -1,32 +1,112 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>Mis Cursos Asignados</h2>
-
-  <div *ngIf="loading">
-    Cargando cursos...
+<div class="student-dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="dashboard-title">
+            <i class="fas fa-graduation-cap me-3"></i>
+            Mis Cursos Asignados
+          </h1>
+          <p class="dashboard-subtitle">
+            Gestiona y visualiza tu progreso académico
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <div class="stats-card">
+            <div class="stats-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stats-content">
+              <div class="stats-value">{{ getTotalHours() }}</div>
+              <div class="stats-label">Horas Totales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div *ngIf="!loading && courses.length > 0">
-    <p><strong>Total de horas:</strong> {{ getTotalHours() }} horas</p>
+  <!-- Main Content -->
+  <div class="container-fluid mt-4">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+      <div class="loading-content">
+        <h3>Cargando tus cursos</h3>
+        <p>Estamos preparando tu experiencia de aprendizaje...</p>
+        <div class="progress mt-3">
+          <div
+            class="progress-bar progress-bar-striped progress-bar-animated"
+            style="width: 85%"
+          ></div>
+        </div>
+      </div>
+    </div>
 
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Curso</th>
-          <th>Intensidad Horaria</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of courses">
-          <td>{{ course.name }}</td>
-          <td>{{ course.hours }} horas</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- Courses Grid -->
+    <div *ngIf="!loading && courses.length > 0" class="courses-grid">
+      <div class="row">
+        <div class="col-12 mb-4">
+          <div class="summary-card">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h4>Resumen Académico</h4>
+                <p class="mb-0">Tienes {{ courses.length }} cursos asignados</p>
+              </div>
+              <div class="col-md-6 text-md-end">
+                <div class="total-hours-display">
+                  <span class="hours-number">{{ getTotalHours() }}</span>
+                  <span class="hours-label">horas totales</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <div *ngIf="!loading && courses.length === 0">
-    <p>No tienes cursos asignados</p>
+        <!-- Course Cards -->
+        <div
+          class="col-xl-4 col-lg-6 col-md-6 mb-4"
+          *ngFor="let course of courses; let i = index"
+        >
+          <div class="course-card" [class.featured]="i === 0">
+            <div class="course-header">
+              <div class="course-actions"></div>
+            </div>
+
+            <div class="course-icon">
+              <i class="bi bi-book"></i>
+            </div>
+
+            <h3 class="course-title">{{ course.name }}</h3>
+
+            <div class="course-meta">
+              <div class="meta-item">
+                <i class="fas fa-clock me-2"></i>
+                <span>{{ course.hours }} horas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && courses.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <h3>No tienes cursos asignados</h3>
+      <p>
+        Actualmente no hay cursos asignados a tu perfil. Contacta con el
+        administrador para obtener acceso.
+      </p>
+    </div>
   </div>
 </div>
