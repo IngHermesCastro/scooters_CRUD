@@ -1,18 +1,86 @@
-<nav *ngIf="currentUser">
-  <div>
-    <span>{{ currentUser.name }} ({{ currentUser.role }})</span>
-  </div>
+<nav *ngIf="currentUser" class="navbar navbar-expand-lg navbar-dark custom-navbar shadow">
+  <div class="container-fluid">
+    <!-- Brand/Logo -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+      <!-- <div class="brand-icon rounded-circle d-flex align-items-center justify-content-center me-2">
+        <i class="fas fa-graduation-cap"></i>
+      </div> -->
+      Dashboard
+    </a>
 
-  <div *ngIf="isAdmin()">
-    <a routerLink="/admin/dashboard">Dashboard</a>
-    <a routerLink="/admin/users">Usuarios</a>
-    <a routerLink="/admin/courses">Cursos</a>
-    <a routerLink="/admin/assignments">Asignar Cursos</a>
-  </div>
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div *ngIf="!isAdmin()">
-    <a routerLink="/student/my-courses">Mis Cursos</a>
-  </div>
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- User Info -->
+      <div class="navbar-user-info me-4">
+        <div class="d-flex align-items-center">
+          <div class="user-avatar rounded-circle d-flex align-items-center justify-content-center me-2">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name fw-semibold">{{ currentUser.name }}</div>
+            <div class="user-role badge custom-badge">{{ currentUser.role }}</div>
+          </div>
+        </div>
+      </div>
 
-  <button (click)="logout()">Cerrar Sesión</button>
+      <!-- Navigation Links -->
+      <ul class="navbar-nav me-auto">
+        <!-- Admin Links -->
+        <li *ngIf="isAdmin()" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="fas fa-tachometer-alt me-1"></i>
+            Administración
+          </a>
+          <ul class="dropdown-menu custom-dropdown">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/dashboard">
+                <i class="fas fa-chart-line me-2"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/users">
+                <i class="fas fa-users me-2"></i>
+                Gestión de Usuarios
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/courses">
+                <i class="fas fa-book me-2"></i>
+                Gestión de Cursos
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/assignments">
+                <i class="fas fa-tasks me-2"></i>
+                Asignar Cursos
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Student Links -->
+        <li *ngIf="!isAdmin()" class="nav-item">
+          <a class="nav-link" routerLink="/student/my-courses">
+            <i class="fas fa-laptop-code me-1"></i>
+            Mis Cursos
+          </a>
+        </li>
+      </ul>
+
+      <!-- Logout -->
+      <div class="navbar-actions">
+        <button class="btn btn-logout" (click)="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
 </nav>
