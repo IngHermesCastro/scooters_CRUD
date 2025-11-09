@@ -1,10 +1,43 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>Dashboard Admin</h2>
+<div class="admin-dashboard">
+  <div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">
+        <i class="fas fa-tachometer-alt me-3"></i>
+        Dashboard Admin
+      </h1>
+      <p class="dashboard-subtitle">Resumen general de la plataforma</p>
+    </div>
 
-  <div>
-    <p>Total Usuarios: {{ totalUsers }}</p>
-    <p>Total Cursos: {{ totalCourses }}</p>
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <div class="stats-card">
+        <div class="stats-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stats-content">
+          <div class="stats-value">{{ totalUsers }}</div>
+          <div class="stats-label">Total Usuarios</div>
+        </div>
+        <div class="stats-badge">
+          <i class="fas fa-user-plus"></i>
+        </div>
+      </div>
+
+      <div class="stats-card">
+        <div class="stats-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="stats-content">
+          <div class="stats-value">{{ totalCourses }}</div>
+          <div class="stats-label">Total Cursos</div>
+        </div>
+        <div class="stats-badge">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
