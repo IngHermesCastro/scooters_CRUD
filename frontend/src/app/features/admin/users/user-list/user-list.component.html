@@ -1,62 +1,155 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>Listado de Usuarios</h2>
+<div class="users-admin">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">
+          <i class="fas fa-users me-3"></i>
+          Listado de Usuarios
+        </h1>
+        <p class="page-subtitle">Gestiona todos los usuarios de la plataforma</p>
+      </div>
+      <button class="btn-create" routerLink="/admin/users/create">
+        <i class="fas fa-plus-circle me-2"></i>
+        Crear Usuario
+      </button>
+    </div>
 
-  <a routerLink="/admin/users/create">Crear Usuario</a>
+    <!-- Filtros -->
+    <div class="filters-card">
+      <div class="filters-header">
+        <h3 class="filters-title">
+          <i class="fas fa-filter me-2"></i>
+          Filtros de Búsqueda
+        </h3>
+      </div>
+      <div class="filters-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="filterName"
+                placeholder="Buscar por nombre...">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="filterEmail"
+                placeholder="Buscar por email...">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label">Rol</label>
+              <select class="form-select" [(ngModel)]="filterRole">
+                <option value="">Todos los roles</option>
+                <option value="admin">Administrador</option>
+                <option value="alumno">Alumno</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="filters-actions">
+          <button class="btn-primary" (click)="applyFilters()">
+            <i class="fas fa-search me-2"></i>
+            Buscar
+          </button>
+          <button class="btn-outline" (click)="clearFilters()">
+            <i class="fas fa-eraser me-2"></i>
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
 
-  <!-- Filtros -->
-  <div>
-    <input
-      type="text"
-      [(ngModel)]="filterName"
-      placeholder="Filtrar por nombre">
+    <!-- Tabla -->
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th class="id-column">ID</th>
+              <th>Usuario</th>
+              <th>Contacto</th>
+              <th class="role-column">Rol</th>
+              <th class="courses-column">Cursos</th>
+              <th class="actions-column">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="user-row">
+              <td class="id-cell">
+                <span class="user-id">#{{ user.id }}</span>
+              </td>
+              <td>
+                <div class="user-info">
+                  <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <div class="user-details">
+                    <div class="user-name">{{ user.name }}</div>
+                    <div class="user-email">{{ user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact-info">
+                  <div class="phone">
+                    <i class="fas fa-phone me-2"></i>
+                    {{ user.phone || 'No especificado' }}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="role-badge" [ngClass]="user.role">
+                  {{ user.role === 'admin' ? 'Administrador' : 'Alumno' }}
+                </span>
+              </td>
+              <td>
+                <div class="courses-count">
+                  <i class="fas fa-book me-2"></i>
+                  <span class="count">{{ user.courses?.length || 0 }}</span>
+                  <span class="label">cursos</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-edit" [routerLink]="['/admin/users/edit', user.id]">
+                    <i class="fas fa-edit"></i>
+                    Editar
+                  </button>
+                  <button class="btn-delete" (click)="deleteUser(user.id)">
+                    <i class="fas fa-trash"></i>
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <input
-      type="text"
-      [(ngModel)]="filterEmail"
-      placeholder="Filtrar por email">
-
-    <select [(ngModel)]="filterRole">
-      <option value="">Todos los roles</option>
-      <option value="admin">Admin</option>
-      <option value="alumno">Alumno</option>
-    </select>
-
-    <button (click)="applyFilters()">Buscar</button>
-    <button (click)="clearFilters()">Limpiar</button>
-  </div>
-
-  <!-- Tabla -->
-  <table border="1">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Rol</th>
-        <th>Cursos</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.phone || '-' }}</td>
-        <td>{{ user.role }}</td>
-        <td>{{ user.courses?.length || 0 }}</td>
-        <td>
-          <a [routerLink]="['/admin/users/edit', user.id]">Editar</a>
-          <button (click)="deleteUser(user.id)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="users.length === 0">
-    No hay usuarios
+      <!-- Empty State -->
+      <div *ngIf="users.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-user-slash"></i>
+        </div>
+        <h3>No hay usuarios</h3>
+        <p>No se encontraron usuarios con los filtros aplicados</p>
+        <button class="btn-primary" (click)="clearFilters()">
+          <i class="fas fa-refresh me-2"></i>
+          Mostrar todos
+        </button>
+      </div>
+    </div>
   </div>
 </div>
