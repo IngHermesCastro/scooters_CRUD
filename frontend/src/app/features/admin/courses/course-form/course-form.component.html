@@ -1,29 +1,102 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>{{ isEditMode ? 'Editar Curso' : 'Crear Curso' }}</h2>
-
-  <form (ngSubmit)="onSubmit()">
-    <div>
-      <label>Nombre del Curso:</label>
-      <input type="text" [(ngModel)]="course.name" name="name" required>
+<div class="course-form-container">
+  <div class="form-wrapper">
+    <!-- Header -->
+    <div class="form-header">
+      <div class="header-icon">
+        <i class="fas" [class.fa-edit]="isEditMode" [class.fa-plus-circle]="!isEditMode"></i>
+      </div>
+      <div class="header-content">
+        <h1 class="form-title">{{ isEditMode ? 'Editar Curso' : 'Crear Curso' }}</h1>
+        <p class="form-subtitle">
+          {{ isEditMode ? 'Actualiza la información del curso' : 'Completa los datos para crear un nuevo curso' }}
+        </p>
+      </div>
     </div>
 
-    <div>
-      <label>Intensidad Horaria:</label>
-      <input type="number" [(ngModel)]="course.hours" name="hours" required min="1">
-    </div>
+    <!-- Form -->
+    <form (ngSubmit)="onSubmit()" class="course-form">
+      <div class="form-grid">
+        <!-- Nombre del Curso -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-book me-2"></i>
+            Nombre del Curso
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="course.name"
+            name="name"
+            required
+            placeholder="Ingresa el nombre del curso">
+          <div class="form-hint">
+            <i class="fas fa-lightbulb me-1"></i>
+            Usa un nombre descriptivo y atractivo
+          </div>
+        </div>
 
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Guardando...' : 'Guardar' }}
-    </button>
+        <!-- Intensidad Horaria -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-clock me-2"></i>
+            Intensidad Horaria
+          </label>
+          <div class="hours-input-group">
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="course.hours"
+              name="hours"
+              required
+              min="1"
+              max="500"
+              placeholder="0">
+            <span class="hours-suffix">horas</span>
+          </div>
+          <div class="form-hint">
+            <i class="fas fa-info-circle me-1"></i>
+            Duración total del curso en horas
+          </div>
 
-    <button type="button" (click)="onCancel()">
-      Cancelar
-    </button>
 
-    <div *ngIf="error" style="color: red;">
-      {{ error }}
-    </div>
-  </form>
+
+        </div>
+
+
+
+
+
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="error-message">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ error }}
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="loading"
+          [class.loading]="loading">
+          <span class="btn-content">
+            <i class="fas" [class.fa-save]="!loading" [class.fa-spinner]="loading"></i>
+            {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar Curso' : 'Crear Curso') }}
+          </span>
+          <span class="btn-loader" *ngIf="loading">
+            <div class="spinner"></div>
+          </span>
+        </button>
+
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          <i class="fas fa-times me-2"></i>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
