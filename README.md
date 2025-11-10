@@ -47,7 +47,7 @@
 
 ## 📖 Descripción
 
-Sistema de gestión académica desarrollado con **Laravel 11** (Backend API REST) y **Angular 19** (Frontend SPA), diseñado para facilitar la administración de usuarios, cursos y asignaciones estudiantiles. Implementa control de acceso basado en roles (**Administrador** y **Alumno**), autenticación segura mediante **JWT**, y una arquitectura modular que garantiza escalabilidad y mantenibilidad.
+Sistema de gestión académica desarrollado con **Laravel 9** (Backend API REST) y **Angular 19** (Frontend SPA), diseñado para facilitar la administración de usuarios, cursos y asignaciones estudiantiles. Implementa control de acceso basado en roles (**Administrador** y **Alumno**), autenticación segura mediante **JWT**, y una arquitectura modular que garantiza escalabilidad y mantenibilidad.
 
 ### 🎯 Objetivos del Proyecto
 
@@ -104,7 +104,7 @@ Sistema de gestión académica desarrollado con **Laravel 11** (Backend API REST
 | Tecnología | Versión | Propósito |
 |-----------|---------|-----------|
 | **PHP** | 8.2+ | Lenguaje base |
-| **Laravel** | 11.x | Framework backend |
+| **Laravel** | 9.x | Framework backend |
 | **Laravel Sanctum** | - | Autenticación JWT |
 | **MySQL** | 8.x | Base de datos |
 | **Composer** | 2.x | Gestión de dependencias |
@@ -112,11 +112,11 @@ Sistema de gestión académica desarrollado con **Laravel 11** (Backend API REST
 ### Frontend
 | Tecnología | Versión | Propósito |
 |-----------|---------|-----------|
-| **TypeScript** | 5.x | Lenguaje tipado |
-| **Angular** | 19.x | Framework frontend |
-| **RxJS** | 7.x | Programación reactiva |
-| **Angular Router** | 19.x | Navegación SPA |
-| **Angular Material** | 19.x | Componentes UI (opcional) |
+| **TypeScript** | 5 | Lenguaje tipado |
+| **Angular** | 19 | Framework frontend |
+| **RxJS** | 7 | Programación reactiva |
+| **Angular Router** | 19 | Navegación SPA |
+| **Angular Material** | 19 | Componentes UI (opcional) |
 
 ### Herramientas de Desarrollo
 - **Git** - Control de versiones
@@ -133,11 +133,11 @@ Asegúrate de tener instaladas las siguientes herramientas antes de comenzar:
 ```bash
 # Verificar versiones instaladas
 php --version        # >= 8.2
-composer --version   # >= 2.x
-node --version       # >= 20.x
-npm --version        # >= 10.x
-ng version          # Angular CLI 19.x
-mysql --version     # >= 8.x
+composer --version   # >= 2
+node --version       # >= 20
+npm --version        # >= 10
+ng version          # Angular CLI 19
+mysql --version     # >= 8
 git --version       # Última versión
 ```
 
@@ -155,7 +155,7 @@ git --version       # Última versión
 ```
 scooters_CRUD/
 │
-├── backend/                          # Laravel 11 - API REST
+├── backend/                          # Laravel 9 - API REST
 │   ├── app/
 │   │   ├── Http/
 │   │   │   ├── Controllers/          # Controladores de la API
@@ -370,7 +370,7 @@ export const environment = {
 ```typescript
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-dominio.com/api',
+  apiUrl: 'https://mi-dominio.com/api',
   appName: 'Sistema de Gestión de Cursos',
   tokenKey: 'auth_token',
   userKey: 'current_user',
@@ -425,8 +425,8 @@ Edita `config/sanctum.php`:
 
 1. Abre tu navegador en `http://localhost:4200`
 2. Inicia sesión con las credenciales del administrador:
-   - **Email**: `admin@cursos.com`
-   - **Password**: `password`
+   - **Email**: `admin@example.com`
+   - **Password**: `1234567`
 
 ### 2. Panel de Administrador
 
@@ -560,7 +560,7 @@ Role: admin
 {
   "name": "María García",
   "email": "maria@example.com",
-  "password": "password123",
+  "password": "123456",
   "role": "alumno"
 }
 ```
@@ -596,7 +596,7 @@ Authorization: Bearer {token}
     {
       "id": 1,
       "title": "Desarrollo Web con Laravel",
-      "description": "Curso completo de Laravel 11",
+      "description": "Curso completo de Laravel 9",
       "duration_hours": 40,
       "instructor": "Prof. Hermes Castro",
       "created_at": "2025-01-10T08:00:00.000000Z"
