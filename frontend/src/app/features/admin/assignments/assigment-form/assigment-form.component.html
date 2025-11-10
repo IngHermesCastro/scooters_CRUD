@@ -1,69 +1,183 @@
 <app-navbar></app-navbar>
 
-<div>
-  <h2>Asignar Cursos a Usuarios</h2>
-
-  <!-- Seleccionar Usuario -->
-  <div>
-    <label>Seleccionar Usuario:</label>
-    <select [(ngModel)]="selectedUserId" (change)="onUserChange()">
-      <option value="0">-- Selecciona un usuario --</option>
-      <option *ngFor="let user of users" [value]="user.id">
-        {{ user.name }} ({{ user.email }})
-      </option>
-    </select>
-  </div>
-
-  <div *ngIf="selectedUserId > 0">
-    <!-- Cursos Disponibles -->
-    <div>
-      <h3>Cursos Disponibles</h3>
-      <div *ngFor="let course of courses">
-        <label>
-          <input
-            type="checkbox"
-            [value]="course.id"
-            [checked]="isCourseAssigned(course.id)"
-            [disabled]="isCourseAssigned(course.id)"
-            (change)="onCourseCheckChange(course.id, $event)">
-          {{ course.name }} ({{ course.hours }} horas)
-          <span *ngIf="isCourseAssigned(course.id)">(Ya asignado)</span>
-        </label>
+<div class="assign-courses-container">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">
+          <i class="fas fa-tasks me-3"></i>
+          Asignar Cursos a Usuarios
+        </h1>
+        <p class="page-subtitle">Gestiona la asignación de cursos a los usuarios de la plataforma</p>
       </div>
     </div>
 
-    <button (click)="assignCourses()" [disabled]="loading || selectedCourseIds.length === 0">
-      {{ loading ? 'Asignando...' : 'Asignar Cursos Seleccionados' }}
-    </button>
-
-    <!-- Cursos Asignados al Usuario -->
-    <div *ngIf="userCourses.length > 0">
-      <h3>Cursos Asignados</h3>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Curso</th>
-            <th>Intensidad Horaria</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let course of userCourses">
-            <td>{{ course.name }}</td>
-            <td>{{ course.hours }} horas</td>
-            <td>
-              <button (click)="unassignCourse(course.id)">Desasignar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- User Selection Card -->
+    <div class="selection-card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-user me-2"></i>
+          Seleccionar Usuario
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Buscar y seleccionar usuario</label>
+          <select class="form-select user-select" [(ngModel)]="selectedUserId" (change)="onUserChange()">
+            <option value="0">-- Selecciona un usuario --</option>
+            <option *ngFor="let user of users" [value]="user.id">
+              {{ user.name }} ({{ user.email }}) - {{ user.role === 'admin' ? 'Administrador' : 'Alumno' }}
+            </option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="userCourses.length === 0">
-      <p>Este usuario no tiene cursos asignados</p>
+    <!-- Main Content when User Selected -->
+    <div *ngIf="selectedUserId > 0" class="assignments-content">
+      <div class="row">
+        <!-- Available Courses -->
+        <div class="col-lg-6 mb-4">
+          <div class="courses-card available-courses">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-book me-2"></i>
+                Cursos Disponibles
+                <span class="badge-count">{{ courses.length }}</span>
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="courses-list">
+                <div *ngFor="let course of courses" class="course-item"
+                     [class.assigned]="isCourseAssigned(course.id)">
+                  <div class="course-checkbox">
+                    <input
+                      type="checkbox"
+                      [id]="'course-' + course.id"
+                      [value]="course.id"
+
+                      [disabled]="isCourseAssigned(course.id)"
+                      (change)="onCourseCheckChange(course.id, $event)">
+                    <label [for]="'course-' + course.id" class="checkbox-label"></label>
+                  </div>
+                  <div class="course-info">
+                    <div class="course-name">{{ course.name }}</div>
+                    <div class="course-meta">
+                      <span class="hours">
+                        <i class="fas fa-clock me-1"></i>
+                        {{ course.hours }} horas
+                      </span>
+
+                    </div>
+                  </div>
+                  <div class="course-status" *ngIf="isCourseAssigned(course.id)">
+                    <span class="status-badge assigned">
+                      <i class="fas fa-check-circle me-1"></i>
+                      Asignado
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Selection Summary -->
+              <div class="selection-summary" *ngIf="selectedCourseIds.length > 0">
+                <div class="summary-content">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <strong>{{ selectedCourseIds.length }}</strong> curso(s) seleccionado(s) para asignar
+                </div>
+              </div>
+
+              <!-- Assign Button -->
+              <button
+                class="btn-assign w-100"
+                (click)="assignCourses()"
+                [disabled]="loading || selectedCourseIds.length === 0"
+                [class.loading]="loading">
+                <span class="btn-content">
+                  <i class="fas" [class.fa-plus-circle]="!loading" [class.fa-spinner]="loading"></i>
+                  {{ loading ? 'Asignando...' : 'Asignar Cursos Seleccionados' }}
+                </span>
+                <span class="btn-loader" *ngIf="loading">
+                  <div class="spinner"></div>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- User's Assigned Courses -->
+        <div class="col-lg-6 mb-4">
+          <div class="courses-card assigned-courses">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-list-check me-2"></i>
+                Cursos Asignados
+                <span class="badge-count">{{ userCourses.length }}</span>
+              </h3>
+            </div>
+            <div class="card-body">
+              <!-- Empty State -->
+              <div *ngIf="userCourses.length === 0" class="empty-assignments">
+                <div class="empty-icon">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                <h4>No hay cursos asignados</h4>
+                <p>Este usuario no tiene cursos asignados actualmente</p>
+              </div>
+
+              <!-- Courses List -->
+              <div *ngIf="userCourses.length > 0" class="assigned-list">
+                <div *ngFor="let course of userCourses" class="assigned-course">
+
+                  <div class="course-details">
+                    <div class="course-name">{{ course.name }}</div>
+                    <div class="course-hours">
+                      <i class="fas fa-clock me-1"></i>
+                      {{ course.hours }} horas
+                    </div>
+                  </div>
+                  <button class="btn-unassign" (click)="unassignCourse(course.id)" title="Desasignar curso">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- User Stats -->
+              <div class="user-stats" *ngIf="userCourses.length > 0">
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <div class="stat-value">{{ userCourses.length }}</div>
+                    <div class="stat-label">Cursos</div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div *ngIf="error" class="alert-message error">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+
+    <div *ngIf="success" class="alert-message success">
+      <i class="fas fa-check-circle me-2"></i>
+      {{ success }}
+    </div>
+
+    <!-- No User Selected State -->
+    <div *ngIf="selectedUserId === 0" class="no-selection-state">
+      <div class="no-selection-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <h3>Selecciona un usuario</h3>
+      <p>Por favor, selecciona un usuario de la lista para gestionar sus cursos asignados</p>
     </div>
   </div>
-
-  <div *ngIf="error" style="color: red;">{{ error }}</div>
-  <div *ngIf="success" style="color: green;">{{ success }}</div>
 </div>
